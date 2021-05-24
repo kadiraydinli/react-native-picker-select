@@ -29,6 +29,7 @@ export default class RNPickerSelect extends PureComponent {
         style: PropTypes.shape({}),
         children: PropTypes.any, // eslint-disable-line react/forbid-prop-types
         onOpen: PropTypes.func,
+        onClose: PropTypes.func,
         useNativeAndroidPickerStyle: PropTypes.bool,
         fixAndroidTouchableBug: PropTypes.bool,
 
@@ -37,7 +38,6 @@ export default class RNPickerSelect extends PureComponent {
         onDonePress: PropTypes.func,
         onUpArrow: PropTypes.func,
         onDownArrow: PropTypes.func,
-        onClose: PropTypes.func,
 
         // Modal props (iOS only)
         modalProps: PropTypes.shape({}),
@@ -473,6 +473,7 @@ export default class RNPickerSelect extends PureComponent {
             style,
             pickerProps,
             onOpen,
+            onClose,
             touchableWrapperProps,
             fixAndroidTouchableBug,
         } = this.props;
@@ -496,6 +497,12 @@ export default class RNPickerSelect extends PureComponent {
                         ]}
                         testID="android_picker_headless"
                         enabled={!disabled}
+                        onFocus={() => {
+                            if (fixAndroidTouchableBug && onOpen) {
+                                onOpen()
+                            }
+                        }}
+                        onBlur={() => onClose && onClose()}
                         onValueChange={this.onValueChange}
                         selectedValue={selectedItem.value}
                         {...pickerProps}
@@ -508,7 +515,14 @@ export default class RNPickerSelect extends PureComponent {
     }
 
     renderAndroidNativePickerStyle() {
-        const { disabled, Icon, style, pickerProps } = this.props;
+        const { 
+            disabled,
+            Icon,
+            onOpen,
+            onClose,
+            style,
+            pickerProps
+        } = this.props;
         const { selectedItem } = this.state;
 
         return (
@@ -521,6 +535,8 @@ export default class RNPickerSelect extends PureComponent {
                     ]}
                     testID="android_picker"
                     enabled={!disabled}
+                    onFocus={() => onOpen && onOpen()}
+                    onBlur={() => onClose && onClose()}
                     onValueChange={this.onValueChange}
                     selectedValue={selectedItem.value}
                     {...pickerProps}

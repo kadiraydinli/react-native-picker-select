@@ -71,13 +71,13 @@ export interface PickerSelectProps {
     style?: PickerStyle;
     children?: React.ReactNode;
     onOpen?: () => void;
+    onClose?: () => void;
     useNativeAndroidPickerStyle?: boolean;
     fixAndroidTouchableBug?: boolean;
     doneText?: string;
     onDonePress?: () => void;
     onUpArrow?: () => void;
     onDownArrow?: () => void;
-    onClose?: () => void;
     modalProps?: CustomModalProps;
     textInputProps?: CustomTextInputProps;
     pickerProps?: CustomPickerProps;
